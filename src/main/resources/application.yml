@@ -16,4 +16,7 @@ spring:
           uri: https://github.com/springcloudnative/config-service.git
           searchPaths: '{application}'
           default-label: main
+          timeout: 5            # Time limit to establish a connection with the remote repository
+          clone-on-start: true  # Clones the remote repository locally on startup
+          force-pull: true      # Forces pulling the remote repository and discarding any local change
 
