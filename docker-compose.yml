@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  config-service:
+    image: ernestoacostacuba/config-service:0.0.1-SNAPSHOT
+    container_name: config-service
+    environment:
+      BPL_DEBUG_ENABLED: true   # Activates the JVM configuration for accepting debug connections
+      BPL_DEBUG_PORT: 8001      # Debug connections are accepted via a socket on port 8001
+      BPL_JVM_THREAD_COUNT: 50
+    ports:
+      - '8888:8888'
+    command: sh -c "/wait && java -Djava.security.egd=file:/dev/./urandom -jar /config-service.jar"
+    networks:
+      - catalog-network
+
+networks:
+  catalog-network:
