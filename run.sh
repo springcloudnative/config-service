@@ -4,6 +4,7 @@ declare project_dir=$(dirname $0)
 declare registry_url=$1
 declare registry_username=$2
 declare registry_token=$3
+declare image_version=$4
 
 function restart() {
     stop_all
@@ -30,8 +31,15 @@ function start_infra() {
 }
 
 function build_image() {
-  echo 'Building image with Buildpacks....'
-  ./mvnw spring-boot:build-image -DREGISTRY_URL=$1 -DREGISTRY_USERNAME=$2 -DREGISTRY_TOKEN=$3 -DskipTests=true
+  echo "Building image with Buildpacks....$4"
+
+  if [ -z "$4" ];
+  then
+    echo "Snapshot version"
+      ./mvnw spring-boot:build-image -Premote -DREGISTRY_URL=$1 -DREGISTRY_USERNAME=$2 -DREGISTRY_TOKEN=$3 -DskipTests=true
+  else
+    ./mvnw spring-boot:build-image -Premote -DREGISTRY_URL=$1 -DREGISTRY_USERNAME=$2 -DREGISTRY_TOKEN=$3  -DimageVersion=$4 -DskipTests=true
+  fi
 }
 
 function start_all() {

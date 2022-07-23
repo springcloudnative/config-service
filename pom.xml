@@ -24,6 +24,7 @@
 		<registryToken>${REGISTRY_TOKEN}</registryToken>
 		<!--The container registry URL. The value is passed as a Maven property.-->
 		<registryUrl>${REGISTRY_URL}</registryUrl>
+		<imageVersion>${project.version}</imageVersion>
 		<jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
 	</properties>
 
@@ -131,6 +132,9 @@
 			<id>remote</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>!imageVersion</name>
+				</property>
 			</activation>
 			<build>
 				<plugins>
@@ -142,7 +146,7 @@
 								<enabled>true</enabled>
 							</layers>
 							<image>
-								<name>${registryUsername}/${project.name}:${project.version}</name>
+								<name>${registryUsername}/${project.name}:${imageVersion}</name>
 								<publish>true</publish>
 								<env>
 									<BP_JVM_VERSION>11</BP_JVM_VERSION>
