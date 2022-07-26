@@ -18,11 +18,14 @@
 		<spring-cloud.version>2021.0.1</spring-cloud.version>
 		<!--The username to use when authenticating with the container registry. The value is
 		passed as a Maven property-->
+		<!--suppress UnresolvedMavenProperty -->
 		<registryUsername>${REGISTRY_USERNAME}</registryUsername>
 		<!--The token to use when authenticating with the container registry. The value is
 		passed as a Maven property.-->
+		<!--suppress UnresolvedMavenProperty -->
 		<registryToken>${REGISTRY_TOKEN}</registryToken>
 		<!--The container registry URL. The value is passed as a Maven property.-->
+		<!--suppress UnresolvedMavenProperty -->
 		<registryUrl>${REGISTRY_URL}</registryUrl>
 		<imageVersion>${project.version}</imageVersion>
 		<jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
@@ -54,42 +57,6 @@
 
 	<build>
 		<plugins>
-<!--			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<layers>
-						<enabled>false</enabled>
-					</layers>
-					<image>
-						<name>${registryUsername}/${project.name}:${project.version}</name>
-						<publish>true</publish>
-						<env>
-							<BP_JVM_VERSION>11</BP_JVM_VERSION>
-						</env>
-					</image>
-					<docker>
-						<builderRegistry>
-							<username>${registryUsername}</username>
-							<password>${registryToken}</password>
-							<url>${registryUrl}</url>
-						</builderRegistry>
-						<publishRegistry>
-							<username>${registryUsername}</username>
-							<password>${registryToken}</password>
-							<url>${registryUrl}</url>
-						</publishRegistry>
-					</docker>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-image</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -105,6 +72,7 @@
 	</build>
 
 	<profiles>
+		<!--This profile is used to deploy the application to the local K8 cluster using Skaffold-->
 		<profile>
 			<id>jib</id>
 			<activation>
@@ -121,6 +89,9 @@
 								<ports>
 									<port>9001</port>
 								</ports>
+								<jvmFlags>
+									<jvmFlag>-DskipTests</jvmFlag>
+								</jvmFlags>
 							</container>
 						</configuration>
 					</plugin>
